@@ -27,6 +27,12 @@
 		54BE3876274379C90011F1C9 /* SelectProcedureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BE3874274379C90011F1C9 /* SelectProcedureView.swift */; };
 		54BE3878274380520011F1C9 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BE3877274380520011F1C9 /* CalendarView.swift */; };
 		54BE3879274380520011F1C9 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BE3877274380520011F1C9 /* CalendarView.swift */; };
+		DDB6F35A27629F7700C67DEC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F35927629F7700C67DEC /* ScheduleView.swift */; };
+		DDB6F35B27629F7700C67DEC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F35927629F7700C67DEC /* ScheduleView.swift */; };
+		DDB6F35E2762C49700C67DEC /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F35D2762C49700C67DEC /* Appointment.swift */; };
+		DDB6F35F2762C49700C67DEC /* Appointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F35D2762C49700C67DEC /* Appointment.swift */; };
+		DDB6F3612762E54000C67DEC /* ConfirmAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F3602762E53F00C67DEC /* ConfirmAppointmentView.swift */; };
+		DDB6F3622762E54000C67DEC /* ConfirmAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6F3602762E53F00C67DEC /* ConfirmAppointmentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +70,9 @@
 		54BE38712741F26F0011F1C9 /* AppointmentPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentPreviewView.swift; sourceTree = "<group>"; };
 		54BE3874274379C90011F1C9 /* SelectProcedureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectProcedureView.swift; sourceTree = "<group>"; };
 		54BE3877274380520011F1C9 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		DDB6F35927629F7700C67DEC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
+		DDB6F35D2762C49700C67DEC /* Appointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointment.swift; sourceTree = "<group>"; };
+		DDB6F3602762E53F00C67DEC /* ConfirmAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmAppointmentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +128,9 @@
 				54BE38712741F26F0011F1C9 /* AppointmentPreviewView.swift */,
 				54BE3874274379C90011F1C9 /* SelectProcedureView.swift */,
 				54BE3877274380520011F1C9 /* CalendarView.swift */,
+				DDB6F35927629F7700C67DEC /* ScheduleView.swift */,
+				DDB6F3602762E53F00C67DEC /* ConfirmAppointmentView.swift */,
+				DDB6F35C2762C49000C67DEC /* Models */,
 				54BE38312740F39B0011F1C9 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -159,6 +171,14 @@
 				54BE38552740F39B0011F1C9 /* Tests_macOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		DDB6F35C2762C49000C67DEC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DDB6F35D2762C49700C67DEC /* Appointment.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,8 +342,11 @@
 				54BE386F2740F9310011F1C9 /* BrandView.swift in Sources */,
 				54BE3878274380520011F1C9 /* CalendarView.swift in Sources */,
 				54BE386C2740F3D10011F1C9 /* LoginView.swift in Sources */,
+				DDB6F35E2762C49700C67DEC /* Appointment.swift in Sources */,
 				54BE3875274379C90011F1C9 /* SelectProcedureView.swift in Sources */,
 				54BE38592740F39B0011F1C9 /* ContentView.swift in Sources */,
+				DDB6F35A27629F7700C67DEC /* ScheduleView.swift in Sources */,
+				DDB6F3612762E54000C67DEC /* ConfirmAppointmentView.swift in Sources */,
 				54BE38722741F26F0011F1C9 /* AppointmentPreviewView.swift in Sources */,
 				54BE38572740F39B0011F1C9 /* KeyPlasticSurgeryApp.swift in Sources */,
 			);
@@ -336,8 +359,11 @@
 				54BE38702740F9310011F1C9 /* BrandView.swift in Sources */,
 				54BE3879274380520011F1C9 /* CalendarView.swift in Sources */,
 				54BE386D2740F3D10011F1C9 /* LoginView.swift in Sources */,
+				DDB6F35F2762C49700C67DEC /* Appointment.swift in Sources */,
 				54BE3876274379C90011F1C9 /* SelectProcedureView.swift in Sources */,
 				54BE385A2740F39B0011F1C9 /* ContentView.swift in Sources */,
+				DDB6F35B27629F7700C67DEC /* ScheduleView.swift in Sources */,
+				DDB6F3622762E54000C67DEC /* ConfirmAppointmentView.swift in Sources */,
 				54BE38732741F26F0011F1C9 /* AppointmentPreviewView.swift in Sources */,
 				54BE38582740F39B0011F1C9 /* KeyPlasticSurgeryApp.swift in Sources */,
 			);

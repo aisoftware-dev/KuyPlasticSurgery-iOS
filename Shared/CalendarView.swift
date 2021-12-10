@@ -1,119 +1,135 @@
 import SwiftUI
 
 fileprivate extension DateFormatter {
-    static var month: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM"
-        return formatter
-    }
+  static var month: DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMMM"
+    return formatter
+  }
 
-    static var monthAndYear: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter
-    }
+  static var monthAndYear: DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMMM yyyy"
+    return formatter
+  }
 }
 
 fileprivate extension Calendar {
-    func generateDates(
-        inside interval: DateInterval,
-        matching components: DateComponents
-    ) -> [Date] {
-        var dates: [Date] = []
-        dates.append(interval.start)
+  func generateDates(
+    inside interval: DateInterval,
+    matching components: DateComponents
+  ) -> [Date] {
+    var dates: [Date] = []
+    dates.append(interval.start)
 
-        enumerateDates(
-            startingAfter: interval.start,
-            matching: components,
-            matchingPolicy: .nextTime
-        ) { date, _, stop in
-            if let date = date {
-                if date < interval.end {
-                    dates.append(date)
-                } else {
-                    stop = true
-                }
-            }
+    enumerateDates(
+      startingAfter: interval.start,
+      matching: components,
+      matchingPolicy: .nextTime
+    ) { date, _, stop in
+      if let date = date {
+        if date < interval.end {
+          dates.append(date)
+        } else {
+          stop = true
         }
-
-        return dates
+      }
     }
+
+    return dates
+  }
 }
 
 struct CalendarView<DateView>: View where DateView: View {
-    @Environment(\.calendar) var calendar
+  @Environment(\.calendar) var calendar
 
-    let interval: DateInterval
-    let showHeaders: Bool
-    let content: (Date) -> DateView
+  let interval: DateInterval
+  let showHeaders: Bool
+  let content: (Date) -> DateView
+  @Binding var selectedMonth: Date
 
-    init(
-        interval: DateInterval,
-        showHeaders: Bool = true,
-        @ViewBuilder content: @escaping (Date) -> DateView
-    ) {
-        self.interval = interval
-        self.showHeaders = showHeaders
-        self.content = content
-    }
+  init(
+    interval: DateInterval,
+    showHeaders: Bool = true,
+    month: Binding<Date>,
+    @ViewBuilder content: @escaping (Date) -> DateView
+  ) {
+    self.interval = interval
+    self.showHeaders = showHeaders
+    self._selectedMonth = month
+    self.content = content
+  }
 
-    var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-            ForEach(months, id: \.self) { month in
-                Section(header: header(for: month)) {
-                    ForEach(days(for: month), id: \.self) { date in
-                        if calendar.isDate(date, equalTo: month, toGranularity: .month) {
-                            content(date).id(date)
-                        } else {
-                            content(date).hidden()
-                        }
-                    }
-                }
+  var body: some View {
+    LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
+        Section(header: header(for: selectedMonth)) {
+          ForEach(days(for: selectedMonth), id: \.self) { date in
+            if calendar.isDate(date, equalTo: selectedMonth, toGranularity: .month) {
+              content(date).id(date)
+            } else {
+              content(date).hidden()
             }
-        }
+          }
+      }
     }
+  }
 
-    private var months: [Date] {
-        calendar.generateDates(
-            inside: interval,
-            matching: DateComponents(day: 1, hour: 0, minute: 0, second: 0)
-        )
-    }
+  private func incrementMonth() {
+    let calendar = Calendar.current
+    selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth)!
+  }
 
-    private func header(for month: Date) -> some View {
-        let component = calendar.component(.month, from: month)
-        let formatter = component == 1 ? DateFormatter.monthAndYear : .month
+  private func decrementMonth() {
+    let calendar = Calendar.current
+    selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth)!
+  }
 
-        return Group {
-            if showHeaders {
-              VStack {
-                Text(formatter.string(from: month))
-                  .foregroundColor(.white)
-                  .font(.title)
-                  .padding()
-                LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-                  ForEach(["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"], id: \.self) { name in
-                    Text(name)
-                      .foregroundColor(.white)
-                      .font(.caption)
-                  }
-                }
+  private func header(for month: Date) -> some View {
+    let component = calendar.component(.month, from: month)
+    let formatter = component == 1 ? DateFormatter.monthAndYear : .month
+
+    return Group {
+      if showHeaders {
+        VStack {
+          HStack {
+            Image(systemName: "chevron.left")
+              .foregroundColor(.white)
+              .onTapGesture {
+                decrementMonth()
               }
+            Text(formatter.string(from: month))
+              .foregroundColor(.white)
+              .font(.title)
+              .padding()
+            Image(systemName: "chevron.right")
+              .foregroundColor(.white)
+              .onTapGesture {
+                incrementMonth()
+              }
+          }
+          LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
+            ForEach(["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"], id: \.self) { name in
+              Text(name)
+                .foregroundColor(.white)
+                .font(.caption)
             }
+          }
         }
+      }
     }
+  }
 
-    private func days(for month: Date) -> [Date] {
-        guard
-            let monthInterval = calendar.dateInterval(of: .month, for: month),
-            let monthFirstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start),
-            let monthLastWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.end)
-        else { return [] }
-        return calendar.generateDates(
-            inside: DateInterval(start: monthFirstWeek.start, end: monthLastWeek.end),
-            matching: DateComponents(hour: 0, minute: 0, second: 0)
-        )
-    }
+  private func days(for month: Date) -> [Date] {
+    guard
+      let monthInterval = calendar.dateInterval(of: .month, for: month),
+      let monthFirstWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.start),
+      let monthLastWeek = calendar.dateInterval(of: .weekOfMonth, for: monthInterval.end)
+    else { return [] }
+    return calendar.generateDates(
+      inside: DateInterval(start: monthFirstWeek.start, end: monthLastWeek.end),
+      matching: DateComponents(hour: 0, minute: 0, second: 0)
+    )
+  }
 }
 
 struct DayView: View {
@@ -164,8 +180,8 @@ struct DayView: View {
       .padding(.vertical, 4)
       .overlay(
         VStack {
-        Text(String(self.calendar.component(.day, from: date)))
-          .foregroundColor(textColor)
+          Text(String(self.calendar.component(.day, from: date)))
+            .foregroundColor(textColor)
         }.onTapGesture {
           selectedDate = date
         }
@@ -176,12 +192,13 @@ struct DayView: View {
 struct CalendarView_Previews: PreviewProvider {
   static let calendar = Calendar.current
   @State static var selectedDate: Date? = Date()
+  @State static var month: Date = Date()
   
   static var previews: some View {
-    CalendarView(interval: .init()) { date in
+    CalendarView(interval: .init(), month: $month) { date in
       DayView(date: date, selectedDate: $selectedDate)
         .onTapGesture {
-          selectedDate = date 
+          selectedDate = date
         }
     }
     .background(.black)
