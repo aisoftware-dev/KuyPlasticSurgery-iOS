@@ -1,27 +1,25 @@
-//
-//  ContentView.swift
-//  Shared
-//
-//  Created by Kyle Knez on 11/14/21.
-//
-
+import Combine
 import SwiftUI
 
 struct ContentView: View {
-  let calendar = Calendar.current
-  @State var selectedDate: Date? = Date()
-  @State var selectedMonth: Date = Date()
+  @ObservedObject var session = env.sessionStore
+  
+  var hasLoogedIn: Bool {
+    env.sessionStore.isAuthenticated
+  }
   
   var body: some View {
-    ScheduleView(appointments: [])
-//    CalendarView(interval: .init(), month: $selectedMonth) { date in
-//      DayView(date: date, selectedDate: $selectedDate)
-////        .onTapGesture {
-////          selectedDate = date
-////        }
-//    }
-//    .background(.black)
-//    .padding([.leading, .trailing])
+    if hasLoogedIn {
+      HomeView()
+    } else {
+      LoginView()
+    }
+  }
+  
+  init() {
+    UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+    
+    UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
   }
 }
 
@@ -30,3 +28,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
